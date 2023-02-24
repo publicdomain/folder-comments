@@ -30,9 +30,9 @@ namespace FolderComments
         private Icon associatedIcon = null;
 
         /// <summary>
-        /// The rename hierarchy key list.
+        /// The registry key list.
         /// </summary>
-        private List<string> renameHierarchyKeyList = new List<string>();
+        private List<string> registryKeyList = new List<string>();
 
         /// <summary>
         /// The associated icon bitmap.
@@ -40,7 +40,7 @@ namespace FolderComments
         private Bitmap associatedIconBitmap = null;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:RenameHierarchy.MainForm"/> class.
+        /// Initializes a new instance of the <see cref="T:FolderComments.MainForm"/> class.
         /// </summary>
         public MainForm()
         {
@@ -58,10 +58,44 @@ namespace FolderComments
             /* Set values */
 
             // Add context menu item text
-            this.renameHierarchyKeyList.Add($"Software\\Classes\\directory\\shell\\Edit comments");
+            this.registryKeyList.Add($"Software\\Classes\\directory\\shell\\Edit comments");
 
             // Update the program by registry key
-            //#this.UpdateByRegistryKey();
+            this.UpdateByRegistryKey();
+        }
+
+        /// <summary>
+        /// Updates the program by registry key.
+        /// </summary>
+        private void UpdateByRegistryKey()
+        {
+            // Update by registry key
+            using (var registryKey = Registry.CurrentUser.OpenSubKey(this.registryKeyList[0]))
+            {
+                // Check for no returned registry key
+                if (registryKey == null)
+                {
+                    // Disable remove button
+                    this.removeButton.Enabled = false;
+
+                    // Enable add button
+                    this.addButton.Enabled = true;
+
+                    // Update status text
+                    this.activityToolStripStatusLabel.Text = "Inactive";
+                }
+                else
+                {
+                    // Disable add button
+                    this.addButton.Enabled = false;
+
+                    // Enable remove button
+                    this.removeButton.Enabled = true;
+
+                    // Update status text
+                    this.activityToolStripStatusLabel.Text = "Active";
+                }
+            }
         }
 
         /// <summary>
@@ -123,7 +157,6 @@ namespace FolderComments
         {
             // TODO Add code        
         }
-
 
         /// <summary>
         /// Handles the main form load.
