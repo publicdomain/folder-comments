@@ -30,6 +30,11 @@ namespace FolderComments
         private Icon associatedIcon = null;
 
         /// <summary>
+        /// The context menu text.
+        /// </summary>
+        private string contextMenuText = "Edit comments";
+
+        /// <summary>
         /// The registry key list.
         /// </summary>
         private List<string> registryKeyList = new List<string>();
@@ -58,7 +63,7 @@ namespace FolderComments
             /* Set values */
 
             // Add context menu item text
-            this.registryKeyList.Add($"Software\\Classes\\directory\\shell\\Edit comments");
+            this.registryKeyList.Add($"Software\\Classes\\directory\\shell\\{this.contextMenuText}");
 
             // Update the program by registry key
             this.UpdateByRegistryKey();
@@ -110,7 +115,7 @@ namespace FolderComments
                 // Iterate registry keys
                 foreach (string currentRegistryKey in this.registryKeyList)
                 {
-                    // Add openRandom command to registry
+                    // Add command to registry
                     RegistryKey registryKey;
                     registryKey = Registry.CurrentUser.CreateSubKey(currentRegistryKey);
                     registryKey.SetValue("icon", Application.ExecutablePath);
@@ -124,12 +129,12 @@ namespace FolderComments
                 this.UpdateByRegistryKey();
 
                 // Notify user
-                MessageBox.Show($"Open random context menu added!{Environment.NewLine}{Environment.NewLine}Right-click in Windows Explorer to use it.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"{this.contextMenuText} context menu added!{Environment.NewLine}{Environment.NewLine}Right-click in Windows Explorer to use it.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 // Notify user
-                MessageBox.Show($"Error when adding openRandom context menu to registry.{Environment.NewLine}{Environment.NewLine}Message:{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error when adding {this.contextMenuText.ToLowerInvariant()} context menu to registry.{Environment.NewLine}{Environment.NewLine}Message:{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -140,7 +145,26 @@ namespace FolderComments
         /// <param name="e">Event arguments.</param>
         private void OnRemoveButtonClick(object sender, EventArgs e)
         {
-            // TODO Add code
+            try
+            {
+                // Iterate registry keys 
+                foreach (string currentRegistryKey in this.registryKeyList)
+                {
+                    // Remove command from registry
+                    Registry.CurrentUser.DeleteSubKeyTree(currentRegistryKey);
+                }
+
+                // Update the program by registry key
+                this.UpdateByRegistryKey();
+
+                // Notify user
+                MessageBox.Show($"{this.contextMenuText} context menu removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                // Notify user
+                MessageBox.Show($"Error when removing {this.contextMenuText.ToLowerInvariant()} command from registry.{Environment.NewLine}{Environment.NewLine}Message:{Environment.NewLine}{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
