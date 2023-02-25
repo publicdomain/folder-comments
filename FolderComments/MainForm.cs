@@ -240,7 +240,7 @@ namespace FolderComments
             var aboutForm = new AboutForm(
                 $"About {programTitle}",
                 $"{programTitle} {version.Major}.{version.Minor}.{version.Build}",
-                $"Made for: mykemo{Environment.NewLine}DonationCoder.com{Environment.NewLine}Day #55, Week #08 @ February 24, 2023",
+                $"Made for: mykemo{Environment.NewLine}DonationCoder.com{Environment.NewLine}Day #56, Week #08 @ February 25, 2023",
                 licenseText,
                 this.Icon.ToBitmap())
             {
