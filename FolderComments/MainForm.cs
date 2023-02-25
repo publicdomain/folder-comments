@@ -120,7 +120,7 @@ namespace FolderComments
                     registryKey = Registry.CurrentUser.CreateSubKey(currentRegistryKey);
                     registryKey.SetValue("icon", Application.ExecutablePath);
                     registryKey.SetValue("position", "-");
-                    registryKey = Registry.CurrentUser.CreateSubKey($"{registryKey}\\command");
+                    registryKey = Registry.CurrentUser.CreateSubKey($"{currentRegistryKey}\\command");
                     registryKey.SetValue(string.Empty, $"{Path.Combine(Application.StartupPath, Application.ExecutablePath)} \"%1\"");
                     registryKey.Close();
                 }
